@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "PokemonSecuencial";
+}
+
+<h2>PokemonSecuencial</h2>
+
+<ul>
+    @foreach (string pokemon in ViewBag.Pokemones)
+    {
+        <li>@pokemon</li>
+    }
+</ul>

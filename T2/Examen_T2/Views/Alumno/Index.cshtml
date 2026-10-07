@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Examen_T2.Models.Alumno>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .accion-enlace {
+        background: none;
+        border: none;
+        padding: 0;
+        color: var(--bs-link-color, #0d6efd);
+        text-decoration: underline;
+        font: inherit;
+        cursor: pointer;
+    }
+    .accion-enlace:hover {
+        color: var(--bs-link-hover-color, #0a58ca);
+    }
+</style>
+
+<h2>Listado de alumnos</h2>
+<p>@Html.ActionLink("Agregar alumno", "Agregar")</p>
+
+@using (Html.BeginForm("Serializar", "Alumno", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="accion-enlace">Serializar coleccion a JSON</button>
+}
+
+@if (ViewBag.Mensaje != null)
+{
+    <p id="mensaje" class="text-info">@ViewBag.Mensaje</p>
+}
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.dni)</th>
+        <th>@Html.DisplayNameFor(model => model.nombres)</th>
+        <th>@Html.DisplayNameFor(model => model.apellidos)</th>
+        <th>@Html.DisplayNameFor(model => model.carrera)</th>
+        <th>@Html.DisplayNameFor(model => model.ciclo)</th>
+        <th>Acciones</th>
+    </tr>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@Html.DisplayFor(modelItem => item.dni)</td>
+        <td>@Html.DisplayFor(modelItem => item.nombres)</td>
+        <td>@Html.DisplayFor(modelItem => item.apellidos)</td>
+        <td>@Html.DisplayFor(modelItem => item.carrera)</td>
+        <td>@Html.DisplayFor(modelItem => item.ciclo)</td>
+        <td>
+            @Html.ActionLink("Detalles", "Detalles", new { dni = item.dni }) |
+            @Html.ActionLink("Actualizar", "Actualizar", new { dni = item.dni }) |
+            @using (Html.BeginForm("Eliminar", "Alumno", FormMethod.Post, new { style = "display:inline;" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("dni", item.dni)
+                <button type="submit" class="accion-enlace">Eliminar</button>
+            }
+        </td>
+    </tr>
+}
+</table>
+
+@section scripts
+{
+    <script>
+        setTimeout(function () {
+            var mensaje = document.getElementById("mensaje");
+            if (mensaje != null) {
+                mensaje.style.display = "none";
+            }
+        }, 5000);
+    </script>
+}
